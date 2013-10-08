@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#define VERSION_NAME  @"1.0.0"
-#define VERSION  2
+
+#define VERSION_NAME  @"1.1.0"
+#define VERSION  3
 
 @protocol BPushDelegate <NSObject>
 
@@ -26,6 +27,7 @@
 @end
 
 @interface BPush : NSObject
+
 
 /**
  * binChannel的回调
@@ -63,6 +65,8 @@
  */
 + (void)setAccessToken:(NSString *)token;
 
++ (void)setBduss:(NSString *)bduss forApp:(NSString *)appid;
+
 /**
  * 绑定channel. 成功后，如果用户有注册delegate并实现onBindChannel，将会回调该函数
  * @param
@@ -71,6 +75,15 @@
  *     none
  */
 + (void)bindChannel;
+
+/**
+ * 解绑定channel. 成功后，如果用户有注册delegate并实现onBindChannel，将会回调该函数
+ * @param
+ *     none
+ * @return
+ *     none
+ */
++ (void)unbindChannel;
 
 /**
  * 设置tag
@@ -109,6 +122,16 @@
 + (void)delTags:(NSArray *)tags;
 
 /**
+ * 获取当前设备应用的tag列表
+ * @param
+ *     none
+ * @return
+ *     none
+ */
+// 暂不支持
+//+ (void)listTags;
+
+/**
  * 在didReceiveRemoteNotification中调用，用于推送反馈
  * @param
  *     userInfo
@@ -116,6 +139,17 @@
  *     none
  */
 + (void)handleNotification:(NSDictionary *)userInfo;
+
+/**
+ * 获取应用ID，Channel ID，User ID。如果应用没有绑定，那么返回空
+ * @param
+ *     none
+ * @return
+ *     appid/channelid/userid
+ */
++ (NSString *) getChannelId;
++ (NSString *) getUserId;
++ (NSString *) getAppId;
 
 @end
 
@@ -130,8 +164,10 @@
 
 // 方法名, 用BPushRequestMethodKey取出的值
 #define BPushRequestMethod_Bind    @"bind"
+#define BPushRequestMethod_Unbind    @"unbind"
 #define BPushRequestMethod_SetTag  @"set_tag"
 #define BPushRequestMethod_DelTag  @"del_tag"
+#define BPushRequestMethod_ListTag  @"list_tag"
 
 /**
  * 请求错误码
